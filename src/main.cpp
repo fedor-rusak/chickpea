@@ -1,25 +1,7 @@
-#if defined(_MSC_VER)
-	#include <windows.h>
-#else
-	#include <unistd.h>
-	#define Sleep(x) usleep(1000*x)
-#endif
-
-#include <iostream>
-#include <vector>
-
 #define STB_IMAGE_IMPLEMENTATION
 #include "stb_image.h"
 
-#include "engine/jx_wrapper.hpp"
-
-#include "engine/openal_wrapper.hpp"
-
-#include "engine/freetype_wrapper.hpp"
-#include "glfw.cpp"
-#include "engine/opengl_wrapper.hpp"
-
-#include "engine.cpp"
+#include "engine.hpp"
 
 int main(int argc, char **args) {
 	openal::testAlut("resources/helloworld.wav");
@@ -41,7 +23,7 @@ int main(int argc, char **args) {
   	// opengl::textureData = stbi_load("resources/belmont_alpha.png", &imgWidth, &imgHeight, &n, 0);
  	// free(data);
 
-	engine::bitmap = freetype::testFTloadCharBitmap('S');
+	engine::setBitmap(freetype::testFTloadCharBitmap('S'));
 
 	opengl::compileShaderProgram();
 

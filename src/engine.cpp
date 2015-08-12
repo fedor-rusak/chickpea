@@ -1,3 +1,5 @@
+#include "engine.hpp"
+
 namespace engine {
 
 	void glfwGetTime(JXResult *results, int argc) {
@@ -6,11 +8,16 @@ namespace engine {
 
 	static FT_Bitmap bitmap;
 
+	void setBitmap(FT_Bitmap bitmapValue) {
+		bitmap = bitmapValue;
+	}
+
+
 	static std::vector<int> keys = {GLFW_KEY_ESCAPE, GLFW_KEY_LEFT, GLFW_KEY_RIGHT, GLFW_KEY_UP, GLFW_KEY_DOWN};
 	static std::string names[] = {"escape", "left", "right", "up", "down"};
 
 	void glfwGetInput(JXResult *results, int argc) {
-		GLFWwindow* window = glfw::window;
+		GLFWwindow* window = glfw::getWindow();
 
 		glfw::pollEvents();
 
