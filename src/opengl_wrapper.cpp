@@ -12,6 +12,24 @@
 
 namespace opengl {
 
+	static int width=300, height=300;
+
+	int getWidth() {
+		return width;
+	}
+
+	int getHeight() {
+		return height;
+	}
+
+	void setWidth(int widthValue) {
+		width = widthValue;
+	}
+
+	void setHeight(int heightValue) {
+		height = heightValue;
+	}
+
 	static glm::mat4x4 mProjMatrix = glm::perspective(45.0f, width*1.0f/height, 0.1f, 100.0f);
 
 	static glm::mat4x4 mModelViewMatrix = glm::inverse(glm::translate(glm::mat4(), glm::vec3(0,0,6.0)));
@@ -89,7 +107,7 @@ namespace opengl {
 
 		glm::vec4 n = glm::inverse(vpMatrix) * glm::vec4(x,y,z,1.0);
 
-		std::cout << n[0] << "_" << n[1] << "_" << n[2] << std::endl;
+		// std::cout << n[0] << "_" << n[1] << "_" << n[2] << std::endl;
 
 		result[0] = n[0]/n[3];
 		result[1] = n[1]/n[3];
@@ -111,8 +129,8 @@ namespace opengl {
 		result[0] = mapClickX;
 		result[1] = mapClickY;
 
-		std::cout << x << "_" << y << std::endl;
-		std::cout << mapClickX << "_" << mapClickY << std::endl;
+		// std::cout << x << "_" << y << std::endl;
+		// std::cout << mapClickX << "_" << mapClickY << std::endl;
 	}
 
 	void setup() {

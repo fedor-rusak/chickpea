@@ -1,7 +1,5 @@
 namespace opengl {
 
-	static int width=600, height=600;
-
 	static GLfloat g_vertex_data[] = {
 		-1.0f,-1.0f,0.0,
 		-1.0f,1.0f,0.0,
@@ -47,10 +45,20 @@ namespace opengl {
 
 	void unprojectOnZeroLevel(int, int, float*);
 
+
 	void setup();
 
 	void render(int, int, unsigned char*);
 
 	void setMatrixes(float, float, float);
+
+
+	int getWidth();
+
+	int getHeight();
+
+	void setWidth(int);
+
+	void setHeight(int);
 
 }

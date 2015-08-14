@@ -28,7 +28,7 @@ namespace engine {
 
 		float worldPos[2] = {0};
 		opengl::unprojectOnZeroLevel((int) xpos, (int) ypos, worldPos);
-		std::cout << worldPos[0] << " " << worldPos[1] << std::endl;
+		// std::cout << worldPos[0] << " " << worldPos[1] << std::endl;
 
 
 		if (glfwWindowShouldClose(window) != 0)
@@ -96,4 +96,14 @@ namespace engine {
 
 		return shouldExit;
 	}
+
+	void setResolution() {
+		const GLFWvidmode* vidMode = glfw::getVideoMode();
+
+		opengl::setWidth(vidMode->width);
+		opengl::setHeight(vidMode->height);
+
+		opengl::onResize(vidMode->width, vidMode->height);
+	};
+
 }

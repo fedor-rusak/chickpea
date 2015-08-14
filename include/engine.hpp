@@ -31,4 +31,6 @@ namespace engine {
 
 	bool shouldExit();
 
+	void setResolution();
+
 }

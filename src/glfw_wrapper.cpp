@@ -16,16 +16,29 @@ namespace glfw {
 		onResizeCallback(iWidth, iHeight);
 	}
 
-	char* init(int width, int height, void (*onResizeFunction)(int, int)) {
+	const GLFWvidmode* getVideoMode() {
+		return glfwGetVideoMode(glfwGetPrimaryMonitor());
+	}
+
+	char* init() {
 		if(!glfwInit())
-			return("GLFW3 init SUUUCKS!");
+			return "GLFW3 init SUUUCKS!";
+
+		return "Sucess!";
+	}
+
+	char* initWindow(int width, int height, void (*onResizeFunction)(int, int)) {
+		if(!glfwInit())
+			return "GLFW3 init SUUUCKS!";
 
 		glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
 		glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 0);
 		//http://stackoverflow.com/questions/10862546/questions-about-glfw-behavior-below-gl-3-2
 		// glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
-		window = glfwCreateWindow(width, height, "GLFW test", NULL, NULL);
+		GLFWmonitor* monitor = glfwGetPrimaryMonitor();
+
+		window = glfwCreateWindow(width, height, "GLFW test", monitor, NULL);
 		if(window == NULL) {
 			glfwTerminate();
 			return "No WindoW!";
@@ -43,6 +56,7 @@ namespace glfw {
 		glfwSetWindowSizeCallback(window, onResize);
 
 		glfwSetInputMode(window, GLFW_STICKY_KEYS, GL_TRUE);
+		glfwSwapInterval(1);
 
 		return "Success!";
 	}

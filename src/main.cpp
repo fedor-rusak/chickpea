@@ -6,7 +6,11 @@
 int main(int argc, char **args) {
 	openal::testAlut("resources/helloworld.wav");
 
-	char* glfwResult = glfw::init(opengl::width, opengl::height, opengl::onResize);
+	glfw::init();
+
+	engine::setResolution();
+
+	char* glfwResult = glfw::initWindow(opengl::getWidth(), opengl::getHeight(), opengl::onResize);
 	if (strcmp(glfwResult, "Success!")) {
 		puts(glfwResult);
 		return 1;

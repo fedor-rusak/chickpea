@@ -10,7 +10,11 @@ namespace glfw {
 
 		GLFWwindow* getWindow();
 
-		char* init(int, int, void (*)(int, int));
+		const GLFWvidmode* getVideoMode();
+
+		char* init();
+
+		char* initWindow(int, int, void (*)(int, int));
 
 		void terminate();
 
