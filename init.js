@@ -1,6 +1,9 @@
 "use strict";
 
 function setup(globalContext) {
+	globalContext.FPS = 60;
+	globalContext.timeFrame = 1000/globalContext.FPS;
+
 	globalContext.arrayData =
 		[
 			0,0,3.0
@@ -13,6 +16,8 @@ function setup(globalContext) {
 
 	globalContext.processInput = function() {
 		var input = process.natives.getInput();
+
+		console.log(input.pointer);
 
 		if (input.escape === true || input.closeWindow === true)
 			globalContext["exit"] = true;

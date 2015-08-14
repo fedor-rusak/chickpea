@@ -1,10 +1,34 @@
-#include "engine.hpp"
+#if defined(_MSC_VER)
+	#include <windows.h>
+#else
+	#include <unistd.h>
+	#define Sleep(x) usleep(1000*x)
+#endif
+
+
+#define STB_IMAGE_IMPLEMENTATION
+#include "stb_image.h"
+
+
+#include <iostream>
+
+#include <vector>
+
+#include "engine/jx_wrapper.hpp"
+
+#include "engine/openal_wrapper.hpp"
+
+#include "engine/freetype_wrapper.hpp"
+#include "engine/glfw_wrapper.hpp"
+
+
+#define GLEW_NO_GLU
+#define GLFW_INCLUDE_GL_3
+
+#include <engine/opengl_wrapper.hpp>
+#include <GLFW/glfw3.h>
 
 namespace engine {
-
-	void glfwGetTime(JXResult *results, int argc) {
-		JX_SetDouble(&results[argc], glfw::getTime());
-	}
 
 	static FT_Bitmap bitmap;
 
@@ -12,13 +36,25 @@ namespace engine {
 		bitmap = bitmapValue;
 	}
 
+	void setResolution() {
+		int resolution[2];
+		glfw::getResolution(resolution);
 
-	static std::vector<int> keys = {GLFW_KEY_ESCAPE, GLFW_KEY_LEFT, GLFW_KEY_RIGHT, GLFW_KEY_UP, GLFW_KEY_DOWN};
+		opengl::setWidth(resolution[0]);
+		opengl::setHeight(resolution[1]);
+
+		opengl::onResize(resolution[0], resolution[1]);
+	};
+
+
+	void getTimeCallback(JXResult *results, int argc) {
+		JX_SetDouble(&results[argc], glfw::getTime());
+	}
+
+	static std::vector<int> keys = {256, 263, 262, 265, 264};
 	static std::string names[] = {"escape", "left", "right", "up", "down"};
 
-	void glfwGetInput(JXResult *results, int argc) {
-		GLFWwindow* window = glfw::getWindow();
-
+	void getInputCallback(JXResult *results, int argc) {
 		glfw::pollEvents();
 
 		std::string input = "";
@@ -28,14 +64,23 @@ namespace engine {
 
 		float worldPos[2] = {0};
 		opengl::unprojectOnZeroLevel((int) xpos, (int) ypos, worldPos);
-		// std::cout << worldPos[0] << " " << worldPos[1] << std::endl;
+
+		char numstr[21];
+		sprintf(numstr, "%f", worldPos[0]);
+		input += ",\"pointer\": {\"x\":";
+		input += numstr;
+
+		sprintf(numstr, "%f", worldPos[1]);
+		input += ", \"y\":";
+		input += numstr;
+		input +="}";
 
 
-		if (glfwWindowShouldClose(window) != 0)
+		if (glfw::windowShouldClose() != 0)
 			input += ",\"closeWindow\": true";
 
 		for (int i = 0; i < keys.size(); i += 1) {
-			if (glfwGetKey(window, keys[i]) == GLFW_PRESS) {
+			if (glfw::getKey(keys[i]) == 1) {
 				input += ",\"" + names[i] + "\": true";
 			}
 		}
@@ -69,11 +114,76 @@ namespace engine {
 		opengl::render(bitmap.width, bitmap.rows, bitmap.buffer);
 	}
 
+
+	int init() {
+		openal::testAlut("resources/helloworld.wav");
+
+		glfw::init();
+
+		setResolution();
+
+		char* glfwResult = glfw::initWindow(opengl::getWidth(), opengl::getHeight(), opengl::onResize);
+		if (strcmp(glfwResult, "Success!")) {
+			puts(glfwResult);
+			return 1;
+		}
+
+		if (opengl::init() != 0) {
+			return 2;
+		}
+
+
+		jx::init();
+		jx::defineExtension("getTime", getTimeCallback);
+		jx::defineExtension("getInput", getInputCallback);
+		jx::defineExtension("render", renderCallback);
+		jx::start();
+
+
+		// int imgWidth, imgHeight, n;
+	  	// opengl::textureData = stbi_load("resources/belmont_alpha.png", &imgWidth, &imgHeight, &n, 0);
+	 	// free(data);
+
+		setBitmap(freetype::testFTloadCharBitmap('S'));
+
+		opengl::compileShaderProgram();
+
+		opengl::setup();
+
+		return 0;
+	}
+
+	int terminate() {
+		jx::terminate();
+
+		glfw::terminate();
+
+		return 0;
+	}
+
+
+	double getTimeFrame() {
+		JXValue tempValue;
+		JX_Evaluate(
+			"global.timeFrame;",
+			"getTimeFrame", &tempValue);
+
+		double value = JX_GetDouble(&tempValue);
+		JX_Free(&tempValue);
+
+		return value;
+	}
+
+	double getTime() {
+		return glfw::getTime();
+	}
+
+
 	void processInput() {
 		JXValue tempValue;
 		JX_Evaluate(
 			"global.processInput();",
-			"myscript2", &tempValue);
+			"processInput", &tempValue);
 		JX_Free(&tempValue);
 	}
 
@@ -81,7 +191,7 @@ namespace engine {
 		JXValue result;
 		JX_Evaluate(
 			"process.natives.render(global.arrayData);",
-			"myscript2", &result);
+			"render", &result);
 		JX_Free(&result);
 	}
 
@@ -89,7 +199,7 @@ namespace engine {
 		JXValue tempValue;
 		JX_Evaluate(
 			"global.exit;",
-			"myscript2", &tempValue);
+			"shouldExit", &tempValue);
 
 		bool shouldExit = !JX_IsNullOrUndefined(&tempValue);
 		JX_Free(&tempValue);
@@ -97,13 +207,18 @@ namespace engine {
 		return shouldExit;
 	}
 
-	void setResolution() {
-		const GLFWvidmode* vidMode = glfw::getVideoMode();
+	void other() {
+		jx::loopOnceIOEvents();
 
-		opengl::setWidth(vidMode->width);
-		opengl::setHeight(vidMode->height);
+		jx::approachGC(25);
+	}
 
-		opengl::onResize(vidMode->width, vidMode->height);
-	};
+	void swapBuffers() {
+		glfw::swapBuffers();
+	}
+
+	void sleep(double millis) {
+		Sleep(millis);
+	}
 
 }

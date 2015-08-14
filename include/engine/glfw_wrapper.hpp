@@ -1,29 +1,23 @@
-#define GLEW_NO_GLU
-#define GLFW_INCLUDE_GL_3
-
-#include <GL/glew.h>
-#include <GLFW/glfw3.h>
-
-#include <vector>
-
 namespace glfw {
 
-		GLFWwindow* getWindow();
+	void getResolution(int*);
 
-		const GLFWvidmode* getVideoMode();
+	char* init();
 
-		char* init();
+	char* initWindow(int, int, void (*)(int, int));
 
-		char* initWindow(int, int, void (*)(int, int));
+	void terminate();
 
-		void terminate();
+	void swapBuffers();
 
-		void swapBuffers();
+	float getTime();
 
-		float getTime();
+	void pollEvents();
 
-		void pollEvents();
+	void getCursorPos(double*,double*);
 
-		void getCursorPos(double*,double*);
+	bool windowShouldClose();
+
+	int getKey(int);
 
 }

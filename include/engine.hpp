@@ -1,36 +1,25 @@
-#if defined(_MSC_VER)
-	#include <windows.h>
-#else
-	#include <unistd.h>
-	#define Sleep(x) usleep(1000*x)
-#endif
-
-#include <iostream>
-
-#include "engine/jx_wrapper.hpp"
-
-#include "engine/openal_wrapper.hpp"
-
-#include "engine/freetype_wrapper.hpp"
-#include "engine/glfw_wrapper.hpp"
-#include "engine/opengl_wrapper.hpp"
-
 namespace engine {
 
-	void glfwGetTime(JXResult*, int);
+	int init();
 
-	void setBitmap(FT_Bitmap);
+	int terminate();
 
-	void glfwGetInput(JXResult*, int);
 
-	void renderCallback(JXResult*, int);
+	double getTimeFrame();
+
+	double getTime();
+
 
 	void processInput();
 
-	void render();
-
 	bool shouldExit();
 
-	void setResolution();
+	void render();
+
+	void other();
+
+	void swapBuffers();
+
+	void sleep(double);
 
 }

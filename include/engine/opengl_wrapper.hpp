@@ -1,23 +1,25 @@
 namespace opengl {
 
-	static GLfloat g_vertex_data[] = {
+	int init();
+
+	static float g_vertex_data[] = {
 		-1.0f,-1.0f,0.0,
 		-1.0f,1.0f,0.0,
 		1.0f,-1.0f,0.0,
 		1.0f,1.0f,0.0
 	};
 
-	static GLfloat g_texture_coord_data[] = {
+	static float g_texture_coord_data[] = {
 		0.0f, 1.0f,
 		0.0f, 0.0f,
 		1.0f, 1.0f,
 		1.0f, 0.0f
 	};
 
-	static GLshort indices[] = {0,1,2, 1,2,3};
+	static short indices[] = {0,1,2, 1,2,3};
 
 	//http://stackoverflow.com/questions/27407774/get-supported-glsl-versions
-	static const GLchar* vertexShader =
+	static const char* vertexShader =
 		"#version 130\n"
 		"uniform mat4 mProjection, mModelView;\n"
 		"in vec3 vertexPosition_modelspace;\n"
@@ -28,7 +30,7 @@ namespace opengl {
 		"	gl_Position = mProjection * mModelView * vec4(vertexPosition_modelspace,1.0f);\n"
 		"}";
 
-	static const GLchar* fragmentShader =
+	static const char* fragmentShader =
 		"#version 130\n"
 		"in vec2 vTextureCoord;"
 		"out vec4 vFragColor;\n"
@@ -37,7 +39,7 @@ namespace opengl {
 		"	vFragColor = texture(tex, vTextureCoord);\n"
 		"}";
 
-	static GLuint programID;
+	static int programID;
 
 	void onResize(int, int);
 

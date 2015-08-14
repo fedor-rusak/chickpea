@@ -1,16 +1,26 @@
 #include <iostream>
 
-#include <GL/glew.h>
-
 #define GLM_FORCE_PURE
 #include "glm/glm.hpp"
 #include "glm/gtc/matrix_transform.hpp"
 #include "glm/gtc/matrix_inverse.hpp"
 #include "glm/gtc/type_ptr.hpp"
 
-#include "engine/opengl_wrapper.hpp"
+#include <GL/glew.h>
+
+#include <engine/opengl_wrapper.hpp>
 
 namespace opengl {
+
+	int init() {
+		glewExperimental = GL_TRUE;
+		if (glewInit() != GLEW_OK) {
+			return 1;
+		}
+
+		return 0;
+	}
+
 
 	static int width=300, height=300;
 

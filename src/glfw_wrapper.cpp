@@ -1,4 +1,10 @@
-#include <engine/glfw_wrapper.hpp>
+#define GLEW_NO_GLU
+#define GLFW_INCLUDE_GL_3
+
+#include <GLFW/glfw3.h>
+
+
+#include <vector>
 
 #include <iostream>
 
@@ -6,18 +12,18 @@ namespace glfw {
 
 	static GLFWwindow* window;
 
-	GLFWwindow* getWindow() {
-		return window;
-	}
-
 	static void (*onResizeCallback)(int, int);
 
 	void onResize(GLFWwindow* window, int iWidth, int iHeight) {
 		onResizeCallback(iWidth, iHeight);
 	}
 
-	const GLFWvidmode* getVideoMode() {
-		return glfwGetVideoMode(glfwGetPrimaryMonitor());
+	void getResolution(int *resolution) {
+
+		const GLFWvidmode* vidMode = glfwGetVideoMode(glfwGetPrimaryMonitor());
+
+		resolution[0] = vidMode->width;
+		resolution[1] = vidMode->height;
 	}
 
 	char* init() {
@@ -46,11 +52,6 @@ namespace glfw {
 
 		glfwMakeContextCurrent(window);
 
-		glewExperimental = GL_TRUE;
-		if (glewInit() != GLEW_OK) {
-			glfwTerminate();
-			return "NO GLEW";
-		}
 
 		onResizeCallback = onResizeFunction;
 		glfwSetWindowSizeCallback(window, onResize);
@@ -84,30 +85,17 @@ namespace glfw {
 		glfwGetCursorPos(window, xpos, ypos);
 	}
 
-	std::string getWrappedInput() {
-		glfwPollEvents();
+	bool windowShouldClose() {
+		return glfwWindowShouldClose(window);
+	}
 
-		std::string input = "";
-
-		double xpos, ypos;
-		glfwGetCursorPos(window, &xpos, &ypos);
-		// std::cout << xpos << " " << ypos << std::endl;
-
-
-		if (glfwWindowShouldClose(window) != 0)
-			input += ",\"closeWindow\": true";
-
-		for (int i = 0; i < keys.size(); i += 1) {
-			if (glfwGetKey(window, keys[i]) == GLFW_PRESS) {
-				input += ",\"" + names[i] + "\": true";
-			}
+	int getKey(int keyCode) {
+		if (glfwGetKey(window, keyCode) == GLFW_PRESS) {
+			return 1;
 		}
-
-		input[0] = ' '; //remove first comma
-
-		input = "{" + input + "}";		
-
-		return input;
+		else {
+			return 0;
+		}
 	}
 
 }
