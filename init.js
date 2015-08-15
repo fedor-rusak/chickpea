@@ -1,9 +1,6 @@
 "use strict";
 
 function setup(globalContext) {
-	globalContext.FPS = 60;
-	globalContext.timeFrame = 1000/globalContext.FPS;
-
 	globalContext.arrayData =
 		[
 			0,0,3.0

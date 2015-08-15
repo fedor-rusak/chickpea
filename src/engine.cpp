@@ -162,18 +162,6 @@ namespace engine {
 	}
 
 
-	double getTimeFrame() {
-		JXValue tempValue;
-		JX_Evaluate(
-			"global.timeFrame;",
-			"getTimeFrame", &tempValue);
-
-		double value = JX_GetDouble(&tempValue);
-		JX_Free(&tempValue);
-
-		return value;
-	}
-
 	double getTime() {
 		return glfw::getTime();
 	}

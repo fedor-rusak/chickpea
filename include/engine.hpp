@@ -5,8 +5,6 @@ namespace engine {
 	int terminate();
 
 
-	double getTimeFrame();
-
 	double getTime();
 
 
