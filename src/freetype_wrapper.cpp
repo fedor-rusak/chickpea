@@ -1,8 +1,10 @@
-#include "engine/freetype_wrapper.hpp"
+#include <ft2build.h>
+#include FT_FREETYPE_H
+#include FT_STROKER_H
 
 namespace freetype {
 
-	FT_Bitmap testFTloadCharBitmap(char letter) {
+	void testFTloadCharBitmap(char letter, int *resultWidth, int *resultHeight, unsigned char** resultData) {
 		// Initialize FreeType.
 		FT_Library library;
 		FT_Face face;
@@ -47,15 +49,12 @@ namespace freetype {
 		}
 
 
-		FT_Bitmap *bitmap = new FT_Bitmap();
-		bitmap->width = bitmap2.width;
-		bitmap->rows = bitmap2.rows;
+		*resultWidth = bitmap2.width;
+		*resultHeight = bitmap2.rows;
 
-		bitmap->buffer = someCharData;
+		*resultData = someCharData;
 
 	  	FT_Done_FreeType(library);
-
-	  	return *bitmap;
 	}
 
 }

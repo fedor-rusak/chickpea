@@ -1,11 +1,3 @@
-#if defined(_MSC_VER)
-	#include <windows.h>
-#else
-	#include <unistd.h>
-	#define Sleep(x) usleep(1000*x)
-#endif
-
-
 #define STB_IMAGE_IMPLEMENTATION
 #include "stb_image.h"
 
@@ -30,10 +22,12 @@
 
 namespace engine {
 
-	static FT_Bitmap bitmap;
+	namespace bitmap {
+		static int width;
 
-	void setBitmap(FT_Bitmap bitmapValue) {
-		bitmap = bitmapValue;
+		static int height;
+
+		static unsigned char *data;
 	}
 
 	void setResolution() {
@@ -111,7 +105,7 @@ namespace engine {
 
 		opengl::setMatrixes(myData[0],myData[1],myData[2]);
 
-		opengl::render(bitmap.width, bitmap.rows, bitmap.buffer);
+		opengl::render(bitmap::width, bitmap::height, bitmap::data);
 	}
 
 
@@ -144,7 +138,7 @@ namespace engine {
 	  	// opengl::textureData = stbi_load("resources/belmont_alpha.png", &imgWidth, &imgHeight, &n, 0);
 	 	// free(data);
 
-		setBitmap(freetype::testFTloadCharBitmap('S'));
+		freetype::testFTloadCharBitmap('S', &bitmap::width, &bitmap::height, &bitmap::data);
 
 		opengl::compileShaderProgram();
 
@@ -203,10 +197,6 @@ namespace engine {
 
 	void swapBuffers() {
 		glfw::swapBuffers();
-	}
-
-	void sleep(double millis) {
-		Sleep(millis);
 	}
 
 }

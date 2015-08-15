@@ -18,6 +18,4 @@ namespace engine {
 
 	void swapBuffers();
 
-	void sleep(double);
-
 }

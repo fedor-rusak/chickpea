@@ -14,7 +14,7 @@ function setup(globalContext) {
 	globalContext.processInput = function() {
 		var input = process.natives.getInput();
 
-		console.log(input.pointer);
+		// console.log(input.pointer);
 
 		if (input.escape === true || input.closeWindow === true)
 			globalContext["exit"] = true;
