@@ -2,9 +2,9 @@ namespace glfw {
 
 	void getResolution(int*);
 
-	char* init();
+	bool init();
 
-	char* initWindow(int, int, void (*)(int, int));
+	bool initWindow(int, int, void (*)(int, int));
 
 	void terminate();
 

@@ -3,7 +3,7 @@
 function setup(globalContext) {
 	globalContext.arrayData =
 		[
-			0,0,3.0
+			0,0,5.0
 		];
 
 	globalContext.speed = 0.1;
@@ -21,8 +21,10 @@ function setup(globalContext) {
 
 		if (input.left === true)
 			globalContext.move(0,1);
-		if (input.right === true)
-			globalContext.move(0,-1)
+		if (input.right === true) {
+			globalContext.move(0,-1);
+			process.natives.playSound();
+		}
 		if (input.up === true)
 			globalContext.move(1,-1);
 		if (input.down === true)

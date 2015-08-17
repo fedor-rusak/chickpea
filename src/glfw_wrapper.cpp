@@ -26,17 +26,11 @@ namespace glfw {
 		resolution[1] = vidMode->height;
 	}
 
-	char* init() {
-		if(!glfwInit())
-			return "GLFW3 init SUUUCKS!";
-
-		return "Sucess!";
+	bool init() {
+		return glfwInit();
 	}
 
-	char* initWindow(int width, int height, void (*onResizeFunction)(int, int)) {
-		if(!glfwInit())
-			return "GLFW3 init SUUUCKS!";
-
+	bool initWindow(int width, int height, void (*onResizeFunction)(int, int)) {
 		glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
 		glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 0);
 		//http://stackoverflow.com/questions/10862546/questions-about-glfw-behavior-below-gl-3-2
@@ -47,7 +41,7 @@ namespace glfw {
 		window = glfwCreateWindow(width, height, "GLFW test", monitor, NULL);
 		if(window == NULL) {
 			glfwTerminate();
-			return "No WindoW!";
+			return false;
 		}
 
 		glfwMakeContextCurrent(window);
@@ -59,7 +53,7 @@ namespace glfw {
 		glfwSetInputMode(window, GLFW_STICKY_KEYS, GL_TRUE);
 		glfwSwapInterval(1);
 
-		return "Success!";
+		return true;
 	}
 
 	void swapBuffers() {

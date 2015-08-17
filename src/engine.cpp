@@ -108,22 +108,31 @@ namespace engine {
 		opengl::render(bitmap::width, bitmap::height, bitmap::data);
 	}
 
+	void playSound(JXResult *results, int argc) {
+		openal::play();
+	}
+
 
 	int init() {
-		openal::testAlut("resources/helloworld.wav");
-
-		glfw::init();
-
-		setResolution();
-
-		char* glfwResult = glfw::initWindow(opengl::getWidth(), opengl::getHeight(), opengl::onResize);
-		if (strcmp(glfwResult, "Success!")) {
-			puts(glfwResult);
+		if (!openal::init()) {
 			return 1;
 		}
 
-		if (opengl::init() != 0) {
+		openal::load("resources/helloworld.wav");
+
+
+		if(!glfw::init()) {
 			return 2;
+		}
+
+		setResolution();
+
+		if (!glfw::initWindow(opengl::getWidth(), opengl::getHeight(), opengl::onResize)) {
+			return 3;
+		}
+
+		if (!opengl::init()) {
+			return 4;
 		}
 
 
@@ -131,6 +140,7 @@ namespace engine {
 		jx::defineExtension("getTime", getTimeCallback);
 		jx::defineExtension("getInput", getInputCallback);
 		jx::defineExtension("render", renderCallback);
+		jx::defineExtension("playSound", playSound);
 		jx::start();
 
 
@@ -151,6 +161,8 @@ namespace engine {
 		jx::terminate();
 
 		glfw::terminate();
+
+		openal::terminate();
 
 		return 0;
 	}

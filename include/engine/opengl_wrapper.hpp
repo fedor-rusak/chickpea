@@ -1,6 +1,6 @@
 namespace opengl {
 
-	int init();
+	bool init();
 
 
 	void onResize(int, int);

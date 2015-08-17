@@ -51,13 +51,9 @@ namespace opengl {
 
 	static int programID;
 
-	int init() {
+	bool init() {
 		glewExperimental = GL_TRUE;
-		if (glewInit() != GLEW_OK) {
-			return 1;
-		}
-
-		return 0;
+		return (glewInit() == GLEW_OK);
 	}
 
 
@@ -92,7 +88,7 @@ namespace opengl {
 		if (iWidth != 0 && iHeight != 0) {
 			glViewport(0, 0, iWidth, iHeight);
 			width=iWidth, height=iHeight;
-			opengl::mProjMatrix = glm::perspective(45.0f, width*1.0f/height, 0.1f, 100.0f);
+			mProjMatrix = glm::perspective(45.0f, width*1.0f/height, 0.1f, 100.0f);
 		}
 	}
 
@@ -112,22 +108,22 @@ namespace opengl {
 		GLint glResult = GL_FALSE;
 
 		GLuint vertexShaderID = glCreateShader(GL_VERTEX_SHADER);
-			glShaderSource(vertexShaderID, 1, &opengl::vertexShader , NULL);
+			glShaderSource(vertexShaderID, 1, &vertexShader , NULL);
 			glCompileShader(vertexShaderID);
 		glGetShaderiv(vertexShaderID, GL_COMPILE_STATUS, &glResult);
 
 		if (glResult == GL_FALSE) {
-			opengl::logFailedGLElement(vertexShaderID);
+			logFailedGLElement(vertexShaderID);
 			exit(EXIT_FAILURE);
 		}
 
 		GLuint fragmentShaderID = glCreateShader(GL_FRAGMENT_SHADER);
-			glShaderSource(fragmentShaderID, 1, &opengl::fragmentShader , NULL);
+			glShaderSource(fragmentShaderID, 1, &fragmentShader , NULL);
 			glCompileShader(fragmentShaderID);
 		glGetShaderiv(fragmentShaderID, GL_COMPILE_STATUS, &glResult);
 
 		if (glResult == GL_FALSE) {
-			opengl::logFailedGLElement(fragmentShaderID);
+			logFailedGLElement(fragmentShaderID);
 			exit(EXIT_FAILURE);
 		}
 
@@ -138,7 +134,7 @@ namespace opengl {
 			glGetProgramiv(programID, GL_LINK_STATUS, &glResult);
 
 		if (glResult == GL_FALSE) {
-			opengl::logFailedGLElement(programID);
+			logFailedGLElement(programID);
 			exit(EXIT_FAILURE);
 		}
 
@@ -156,7 +152,6 @@ namespace opengl {
 
 		glm::vec4 n = glm::inverse(vpMatrix) * glm::vec4(x,y,z,1.0);
 
-		// std::cout << n[0] << "_" << n[1] << "_" << n[2] << std::endl;
 
 		result[0] = n[0]/n[3];
 		result[1] = n[1]/n[3];
@@ -170,16 +165,13 @@ namespace opengl {
 		unproject(x,y,1, unprojectModelViewMatrix, mProjMatrix, width, height, farArr);
 
 		float t = -nearArr[2] / (farArr[2] - nearArr[2]);
-		// float t = 1.0;
+
 		// float tempZ = near[2] + (far[2] - near[2]) * t;
 		float mapClickX = nearArr[0] + (farArr[0] - nearArr[0]) * t;
 		float mapClickY = -(nearArr[1] + (farArr[1] - nearArr[1]) * t);
 
 		result[0] = mapClickX;
 		result[1] = mapClickY;
-
-		// std::cout << x << "_" << y << std::endl;
-		// std::cout << mapClickX << "_" << mapClickY << std::endl;
 	}
 
 	void setup() {

@@ -1,25 +1,25 @@
-#if defined(_MSC_VER)
-	#include <windows.h>
-#else
-	#include <unistd.h>
-	#define Sleep(x) usleep(x)
-#endif
+#include <iostream>
 
 #include <AL/alut.h>
 
-#include <engine/openal_wrapper.hpp>
-
 namespace openal {
 
-	void testAlut(char* fileName) {
+	const unsigned int NUM_BUFFERS = 1;
+	const unsigned int NUM_SOURCES = 1;
+
+	static ALuint source = 0;
+
+
+	bool init() {
+		return alutInit(NULL, NULL);
+	}
+
+	void load(char* fileName) {
 		//> Sound buffer variable
 		ALuint buffer = 0;
 
 		//> Sound source varialbe
-		ALuint source = 0;
-
-		//> Initialize ALUT
-		alutInit(NULL, NULL);
+		source = 0;
 
 		//> Generate sound buffer
 		alGenBuffers(NUM_BUFFERS, &buffer);
@@ -32,14 +32,13 @@ namespace openal {
 
 		//> Associate source with sound buffer
 		alSourcei(source, AL_BUFFER, buffer);
+	}
 
-		//> Play the sound
+	void play() {
 		alSourcePlay(source);
-		// std::cout << "sound async" << std::endl;
-		//> Wait for playing sound
-		alutSleep(1);
+	}
 
-		//> Exit from ALUT
+	void terminate() {
 		alutExit();
 	}
 

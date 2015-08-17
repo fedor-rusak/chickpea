@@ -1,8 +1,11 @@
 namespace openal {
 
-	const unsigned int NUM_BUFFERS = 1;
-	const unsigned int NUM_SOURCES = 1;
+	bool init();
 
-	void testAlut(char*);
+	void load(char*);
+
+	void play();
+
+	void terminate();
 
 }
