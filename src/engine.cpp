@@ -41,8 +41,8 @@ namespace engine {
 	};
 
 
-	void getTimeCallback(JXResult *results, int argc) {
-		JX_SetDouble(&results[argc], glfw::getTime());
+	double getTime() {
+		return glfw::getTime();
 	}
 
 	static std::vector<int> keys = {256, 263, 262, 265, 264};
@@ -136,12 +136,12 @@ namespace engine {
 		}
 
 
-		jx::init();
-		jx::defineExtension("getTime", getTimeCallback);
-		jx::defineExtension("getInput", getInputCallback);
-		jx::defineExtension("render", renderCallback);
-		jx::defineExtension("playSound", playSound);
-		jx::start();
+		jx_wrapper::init();
+		jx_wrapper::setTimeCallback(getTime);
+		jx_wrapper::defineExtension("getInput", getInputCallback);
+		jx_wrapper::defineExtension("render", renderCallback);
+		jx_wrapper::defineExtension("playSound", playSound);
+		jx_wrapper::start();
 
 
 		// int imgWidth, imgHeight, n;
@@ -158,18 +158,13 @@ namespace engine {
 	}
 
 	int terminate() {
-		jx::terminate();
+		jx_wrapper::terminate();
 
 		glfw::terminate();
 
 		openal::terminate();
 
 		return 0;
-	}
-
-
-	double getTime() {
-		return glfw::getTime();
 	}
 
 
@@ -202,9 +197,9 @@ namespace engine {
 	}
 
 	void other() {
-		jx::loopOnceIOEvents();
+		jx_wrapper::loopOnceIOEvents();
 
-		jx::approachGC(25);
+		jx_wrapper::approachGC(25);
 	}
 
 	void swapBuffers() {
