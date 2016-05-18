@@ -26,11 +26,11 @@ namespace jx {
 		char *startScript =
 			"\"use strict\";"
 			"try {"
-			"	var init = require('./init.js');"
+			"	var init = require('./resources/jxcore/init.js');"
 			"	init.setup(global);"
 			"}"
 			"catch(e) {"
-			"	console.log('Failure with init.js:\\n' + e);"
+			"	console.log('Failure with ./resources/jxcore/init.js:\\n' + e);"
 			"}";
 		JX_DefineMainFile(startScript);
 		JX_StartEngine();
