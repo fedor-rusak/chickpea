@@ -36,9 +36,7 @@ namespace glfw {
 		//http://stackoverflow.com/questions/10862546/questions-about-glfw-behavior-below-gl-3-2
 		// glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
-		GLFWmonitor* monitor = glfwGetPrimaryMonitor();
-
-		window = glfwCreateWindow(width, height, "GLFW test", monitor, NULL);
+		window = glfwCreateWindow(width, height, "GLFW test", NULL, NULL);
 		if(window == NULL) {
 			glfwTerminate();
 			return false;

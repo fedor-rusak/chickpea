@@ -1,8 +1,10 @@
 #include "jx.h"
 
-namespace jx {
+namespace jx_wrapper {
 
 	void init();
+
+	void setTimeCallback(double (*)());
 
 	void defineExtension(char*, void (*)(JXResult*, int));
 

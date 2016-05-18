@@ -7,7 +7,7 @@
 
 #include <engine/jx_wrapper.hpp>
 
-namespace jx {
+namespace jx_wrapper {
 
 	static int counterBeforeGC = 0;
 
@@ -20,6 +20,17 @@ namespace jx {
 
 	void defineExtension(char* name, void (*callback)(JXResult*, int)) {		
 		JX_DefineExtension(name, callback);
+	}
+
+	double (*getTimeCallback)();
+
+	void getTime(JXValue *results, int argc) {
+		JX_SetDouble(&results[argc], getTimeCallback());
+	}
+
+	void setTimeCallback(double (*callback)()) {
+		getTimeCallback = callback;
+		JX_DefineExtension("getTime", getTime);
 	}
 
 	void start() {

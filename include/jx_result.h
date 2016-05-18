@@ -100,13 +100,19 @@ JX_GetDouble(JXValue *value);
 JXCORE_EXTERN(bool)
 JX_GetBoolean(JXValue *value);
 
-// for String, JSON, Error and Buffer
+// for String, JSON, Error
 // call free on return value when you are done with it
 JXCORE_EXTERN(char *)
 JX_GetString(JXValue *value);
 
 JXCORE_EXTERN(int32_t)
 JX_GetDataLength(JXValue *value);
+
+// for Buffer, it returns a direct pointer to the underlying data. no copying
+// involved
+// don't hold to it longer than necessary, it may be gc'd away
+JXCORE_EXTERN(char *)
+JX_GetBuffer(JXValue *value);
 
 JXCORE_EXTERN(void)
 JX_SetInt32(JXValue *value, const int32_t val);
@@ -195,6 +201,18 @@ JX_GetIndexedProperty(JXValue *object, const int index, JXValue *out);
 // if you have a JXValue around, this method brings threadId much faster
 JXCORE_EXTERN(int)
 JX_GetThreadIdByValue(JXValue *value);
+
+JXCORE_EXTERN(void)
+JX_GetGlobalObject(JXValue *out);
+
+JXCORE_EXTERN(void)
+JX_GetProcessObject(JXValue *out);
+
+JXCORE_EXTERN(void)
+JX_WrapObject(JXValue *object, void *ptr);
+
+JXCORE_EXTERN(void *)
+JX_UnwrapObject(JXValue *object);
 
 #ifdef __cplusplus
 }
