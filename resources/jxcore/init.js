@@ -30,6 +30,10 @@ function setup(globalContext) {
 		if (input.down === true)
 			globalContext.move(1,1);
 	}
+
+	globalContext.render = function() {
+		process.natives.render(globalContext.arrayData);
+	}
 }
 
 try {

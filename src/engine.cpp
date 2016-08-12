@@ -179,7 +179,7 @@ namespace engine {
 	void render() {
 		JXValue result;
 		JX_Evaluate(
-			"process.natives.render(global.arrayData);",
+			"global.render();",
 			"render", &result);
 		JX_Free(&result);
 	}
