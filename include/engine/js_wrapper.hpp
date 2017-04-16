@@ -2,7 +2,7 @@
 
 #include "duktape.h"
 
-namespace jx_wrapper {
+namespace js_wrapper {
 
 	void init();
 

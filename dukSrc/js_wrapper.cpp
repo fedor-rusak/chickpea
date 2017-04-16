@@ -5,17 +5,29 @@
 	#define Sleep(x) usleep(x)
 #endif
 
+#include <iostream>
+
 #include <engine/js_wrapper.hpp>
 
-namespace jx_wrapper {
+#define duk_register(ctx, jsName, functionName, argsCount)  \
+	duk_push_c_function(ctx, functionName, argsCount);       \
+	duk_put_global_string(ctx, jsName);
+
+namespace js_wrapper {
+
+	static duk_context *ctx;
 
 	static int counterBeforeGC = 0;
 
-	void init() {
-		// Call JX_Initialize only once per app
-		//JX_Initialize("some_name", NULL);
+	static duk_ret_t native_print(duk_context *ctx) {
+		printf("%s\n", duk_to_string(ctx, 0));
+		return 0;  /* no return value (= undefined) */
+	}
 
-		//JX_InitializeNewEngine();
+	void init() {
+		ctx = duk_create_heap_default();
+		duk_register(ctx, "print", native_print, 1);
+		duk_peval_string(ctx, "print('JS is working!');");
 	}
 
 	void defineExtension(char* name, void (*callback)(JXResult*, int)) {		
@@ -62,7 +74,7 @@ namespace jx_wrapper {
 	}
 
 	void terminate() {
-		//JX_StopEngine();
+		duk_destroy_heap(ctx);
 	}
 
 }

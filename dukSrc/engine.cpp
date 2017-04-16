@@ -112,7 +112,6 @@ namespace engine {
 		openal::play();
 	}
 
-
 	int init() {
 		if (!openal::init()) {
 			return 1;
@@ -136,7 +135,18 @@ namespace engine {
 		}
 
 
-		// jx_wrapper::init();
+		// std::ifstream infile("script.js");
+
+		// std::string str;
+		// std::string file_contents;
+		// while (std::getline(infile, str)) {
+		// 	file_contents += str;
+		// 	file_contents.push_back('\n');
+		// }
+
+		// std::cout << file_contents;
+
+		js_wrapper::init();
 		// jx_wrapper::setTimeCallback(getTime);
 		// jx_wrapper::defineExtension("getInput", getInputCallback);
 		// jx_wrapper::defineExtension("render", renderCallback);
@@ -158,7 +168,7 @@ namespace engine {
 	}
 
 	int terminate() {
-		// jx_wrapper::terminate();
+		js_wrapper::terminate();
 
 		glfw::terminate();
 
