@@ -26,6 +26,7 @@ extern {
 	fn glfwMakeContextCurrent(window: *mut GLFWwindow) -> c_void;
 	fn glfwWindowShouldClose(window: *mut GLFWwindow) -> c_int;
 	fn glfwSwapBuffers(window: *mut GLFWwindow) -> c_void;
+	fn glfwSetWindowSizeCallback(window: *mut GLFWwindow, onResizeCallback: extern fn(window: *mut GLFWwindow, i32, i32)) -> c_void;
 }
 
 #[link(name = "glew32")]
@@ -39,6 +40,10 @@ extern "stdcall" {
 	fn glClear(bitmask: c_uint) -> c_void;
 }
 
+extern fn on_resize_callback(window: *mut GLFWwindow, width: i32, height: i32) {
+    println!("I'm called from C with value {0} and {1}", width, height);
+}
+
 fn main() {
 	unsafe {
 		let string = CString::new("Something".as_bytes()).unwrap(); //tricky stuff. If written in one line string would vanish!
@@ -47,6 +52,8 @@ fn main() {
 		glfwInit();
 
 		let window = glfwCreateWindow(800 as c_int, 600 as c_int, title, ptr::null_mut(), ptr::null_mut());
+
+		glfwSetWindowSizeCallback(window, on_resize_callback);
 
 		glfwMakeContextCurrent(window);
 
